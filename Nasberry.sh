@@ -2,23 +2,6 @@
 # Set current Time
 sudo date -s "$(curl -s --head http://google.com.au | grep ^Date: | sed 's/Date: //g')"
 
-# Stop unattended Upgrades and wait to continue
-sudo /etc/init.d/unattended-upgrades stop
-i=0 
-tput sc 
-while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 ; do
-     case $(($i % 4)) in
-         0 ) j="-" ;;
-         1 ) j="\\" ;;
-         2 ) j="|" ;;
-         3 ) j="/" ;;
-     esac
-     tput rc
-     echo -en "\r[$j] Waiting for unattended Upgrade to finish..." 
-     sleep 0.5
-     ((i=i+1)) 
-done
-
 # Install necessary Packages and ZFS
 sudo apt update
 sudo apt install -y samba zfs-dkms cockpit
